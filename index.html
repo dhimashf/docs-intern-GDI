@@ -3,45 +3,556 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhimas Hadid</title>
+
+    <title>CSS Layout Playground</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
-<header>
-    <div class="container">
-        <h1>LOGO</h1>
 
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
+<body>
 
-        <button>Contact</button>
-    </div>
-</header>
+    <header class="page-header">
+        <h1>CSS Layout Playground</h1>
+        <p>
+            Playground untuk memahami perbedaan berbagai
+            property CSS secara visual.
+        </p>
+    </header>
 
-<main>
-    <section class="hero">
-        <div class="container">
-            <div class="hero-text">
-                <small>BOOTCAMP RESULT</small>
-                <h2>Your Main Headline<br>Goes Here</h2>
+
+    <!-- =====================================================
+         1. BLOCK vs INLINE
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>1. Block vs Inline</h2>
+
+        <div class="demo-area">
+
+            <h3>Block</h3>
+
+            <div class="block-box">
+                Block 1
+            </div>
+
+            <div class="block-box">
+                Block 2
+            </div>
+
+            <p>
+                Block selalu mengambil satu baris.
+            </p>
+
+        </div>
+
+
+        <div class="demo-area">
+
+            <h3>Inline</h3>
+
+            <span class="inline-box">
+                Inline 1
+            </span>
+
+            <span class="inline-box">
+                Inline 2
+            </span>
+
+            <span class="inline-box">
+                Inline 3
+            </span>
+
+            <p>
+                Inline berada dalam satu baris.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         2. FLEX
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>2. Flex</h2>
+
+        <p class="description">
+            Flex digunakan untuk mengatur posisi item
+            di dalam sebuah container.
+        </p>
+
+        <div class="flex-container">
+
+            <div class="flex-item">A</div>
+            <div class="flex-item">B</div>
+            <div class="flex-item">C</div>
+
+        </div>
+
+        <div class="code-explanation">
+
+            <code>
+                display: flex;
+            </code>
+
+            <span>
+                → anak-anak disusun secara fleksibel.
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         3. FLEX DIRECTION
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>3. Flex Direction</h2>
+
+        <div class="direction-wrapper">
+
+            <div>
+
+                <h3>row</h3>
+
+                <div class="flex-row">
+
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <h3>column</h3>
+
+                <div class="flex-column">
+
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         4. JUSTIFY CONTENT
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>4. justify-content</h2>
+
+        <p class="description">
+            Mengatur posisi item pada arah utama.
+        </p>
+
+
+        <h3>space-between</h3>
+
+        <div class="justify-demo">
+
+            <div>A</div>
+            <div>B</div>
+            <div>C</div>
+
+        </div>
+
+
+        <h3>center</h3>
+
+        <div class="justify-center">
+
+            <div>A</div>
+            <div>B</div>
+            <div>C</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         5. ALIGN ITEMS
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>5. align-items</h2>
+
+        <p class="description">
+            Mengatur posisi item pada arah silang.
+        </p>
+
+        <div class="align-demo">
+
+            <div class="align-item">
+                A
+            </div>
+
+            <div class="align-item">
+                B
+            </div>
+
+            <div class="align-item">
+                C
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         6. GRID
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>6. Grid</h2>
+
+        <p class="description">
+            Grid cocok untuk layout baris dan kolom.
+        </p>
+
+        <div class="grid-container">
+
+            <div>A</div>
+            <div>B</div>
+            <div>C</div>
+            <div>D</div>
+            <div>E</div>
+            <div>F</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         7. POSITION STATIC
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>7. position: static</h2>
+
+        <div class="position-area">
+
+            <div class="position-box static">
+                STATIC
+            </div>
+
+        </div>
+
+        <p class="description">
+            Static = posisi normal berdasarkan flow HTML.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         8. POSITION RELATIVE
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>8. position: relative</h2>
+
+        <div class="position-area">
+
+            <div class="position-box normal">
+                NORMAL
+            </div>
+
+            <div class="position-box relative">
+                RELATIVE
+            </div>
+
+        </div>
+
+        <p class="description">
+            Relative tetap dianggap berada di posisi aslinya,
+            tetapi secara visual bisa digeser.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         9. POSITION ABSOLUTE
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>9. position: absolute</h2>
+
+        <div class="absolute-parent">
+
+            <span class="parent-label">
+                PARENT
+            </span>
+
+            <div class="absolute-child">
+                ABSOLUTE
+            </div>
+
+        </div>
+
+        <p class="description">
+            Absolute keluar dari flow normal.
+            Posisi dihitung dari parent yang menjadi acuan.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         10. RELATIVE + ABSOLUTE
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>10. Relative + Absolute</h2>
+
+        <div class="card">
+
+            <div class="card-content">
+
+                <h3>Product Card</h3>
+
                 <p>
-                    Add a short introduction about yourself and your
-                    bootcamp journey in this area.
+                    Contoh penggunaan relative
+                    sebagai parent absolute.
                 </p>
 
-                <div class="hero-buttons">
-                    <button>View Projects</button>
-                    <button>About Me</button>
-                </div>
             </div>
 
-            <div class="hero-image">
-                HERO IMAGE
-            </div>
+            <span class="badge">
+                NEW
+            </span>
+
         </div>
+
+        <p class="description">
+            Parent → relative<br>
+            Child → absolute
+        </p>
+
     </section>
-</main>
+
+
+    <!-- =====================================================
+         11. FIXED
+         ===================================================== -->
+
+    <section class="section large-section">
+
+        <h2>11. position: fixed</h2>
+
+        <p>
+            Scroll halaman ke bawah.
+        </p>
+
+        <p>
+            Tombol FIXED di pojok kanan bawah
+            akan tetap menempel pada layar.
+        </p>
+
+        <div class="fake-content">
+
+            <p>Scroll...</p>
+            <p>Scroll...</p>
+            <p>Scroll...</p>
+            <p>Scroll...</p>
+            <p>Scroll...</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         12. STICKY
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>12. position: sticky</h2>
+
+        <div class="sticky-container">
+
+            <div class="sticky-header">
+                STICKY HEADER
+            </div>
+
+            <div class="sticky-content">
+
+                <p>Content 1</p>
+                <p>Content 2</p>
+                <p>Content 3</p>
+                <p>Content 4</p>
+                <p>Content 5</p>
+                <p>Content 6</p>
+                <p>Content 7</p>
+                <p>Content 8</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         13. MARGIN
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>13. Margin</h2>
+
+        <div class="margin-demo">
+
+            <div class="margin-box">
+                CONTENT
+            </div>
+
+        </div>
+
+        <p class="description">
+            Margin = jarak di luar elemen.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         14. PADDING
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>14. Padding</h2>
+
+        <div class="padding-demo">
+
+            <div class="padding-box">
+                CONTENT
+            </div>
+
+        </div>
+
+        <p class="description">
+            Padding = jarak antara content dan border.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         15. OVERFLOW
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>15. Overflow</h2>
+
+        <div class="overflow-demo">
+
+            Content ini sengaja dibuat panjang
+            supaya melebihi ukuran container.
+            Karena menggunakan overflow auto,
+            browser akan menyediakan scrollbar
+            ketika content terlalu banyak.
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         16. Z-INDEX
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>16. z-index</h2>
+
+        <div class="z-index-area">
+
+            <div class="z-box red">
+                z-index: 1
+            </div>
+
+            <div class="z-box blue">
+                z-index: 2
+            </div>
+
+        </div>
+
+        <p class="description">
+            z-index menentukan elemen mana yang berada
+            di depan ketika elemen saling bertumpuk.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         17. FLOAT
+         ===================================================== -->
+
+    <section class="section">
+
+        <h2>17. Float</h2>
+
+        <div class="float-area">
+
+            <div class="float-box">
+                FLOAT
+            </div>
+
+            <p>
+                Teks akan mengalir di sekitar elemen
+                yang menggunakan float.
+                Konsep ini banyak digunakan pada
+                layout CSS lama sebelum Flexbox populer.
+            </p>
+
+            <div class="clear"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FIXED BUTTON
+         ===================================================== -->
+
+    <div class="fixed-button">
+        FIXED
+    </div>
+
+
+</body>
+</html>

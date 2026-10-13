@@ -1,115 +1,643 @@
+/* =====================================================
+   BASIC
+   ===================================================== */
+
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-/* body {
+body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    color: #222;
-} */
-
-/* CONTAINER UTAMA */
-.container {
-    width: 80%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* HEADER */
-
-header {
-    border-bottom: 1px solid #222;
-}
-
-header .container {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-} 
-
-/* header h1 {
-    font-size: 16px;
-    background: #222;
-    color: white;
-    padding: 10px 14px;
-}
-
-nav ul {
-    display: flex;
-    gap: 30px;
-    list-style: none;
-}
-
-nav a {
-    color: #222;
-    text-decoration: none;
-}
-
-header button {
-    background: #222;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-} */
-
-/* HERO */
-
-/* .hero {
-    padding: 70px 0;
-}
-
-.hero .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 80px;
-}
-
-.hero-text {
-    flex: 1;
-}
-
-.hero-text small {
-    font-size: 10px;
-    letter-spacing: 2px;
-    font-weight: bold;
-    color: #777;
-}
-
-.hero-text h2 {
-    font-size: 40px;
-    font-weight: 400;
-    margin: 15px 0;
-}
-
-.hero-text p {
-    color: #666;
-    line-height: 1.6;
-    max-width: 450px;
-}
-
-.hero-image {
-    width: 50%;
-    height: 275px;
-
-    border: 1px dashed #888;
     background: #f5f5f5;
+    color: #222;
+}
+
+.page-header {
+    padding: 50px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+.section {
+    width: min(900px, 90%);
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.section h2 {
+    margin-top: 0;
+}
+
+.description {
+    line-height: 1.6;
+    color: #666;
+}
+
+
+/* =====================================================
+   1. BLOCK
+   ===================================================== */
+
+.block-box {
+    width: 150px;
+    padding: 20px;
+    margin: 10px 0;
+
+    background: #bde0fe;
+
+    border: 2px solid #333;
+}
+
+
+/* =====================================================
+   INLINE
+   ===================================================== */
+
+.inline-box {
+    padding: 20px;
+
+    background: #ffc8dd;
+
+    border: 2px solid #333;
+}
+
+
+/* =====================================================
+   2. FLEX
+   ===================================================== */
+
+.flex-container {
+
+    display: flex;
+
+    gap: 20px;
+
+    padding: 30px;
+
+    border: 3px solid #333;
+}
+
+.flex-item {
+
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #a2d2ff;
+
+    border: 2px solid #333;
+}
+
+
+/* =====================================================
+   3. FLEX DIRECTION
+   ===================================================== */
+
+.direction-wrapper {
+
+    display: flex;
+
+    gap: 50px;
+
+}
+
+.flex-row {
+
+    display: flex;
+
+    gap: 10px;
+
+    padding: 20px;
+
+    border: 2px solid #333;
+
+}
+
+.flex-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 20px;
+
+    border: 2px solid #333;
+
+}
+
+.flex-row div,
+.flex-column div {
+
+    width: 60px;
+    height: 60px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    color: #777;
+    background: #cdb4db;
+
+}
+
+
+/* =====================================================
+   4. JUSTIFY CONTENT
+   ===================================================== */
+
+.justify-demo {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 20px;
+
+    border: 2px solid #333;
+
+}
+
+.justify-center {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    border: 2px solid #333;
+
+}
+
+.justify-demo div,
+.justify-center div {
+
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffafcc;
+
+}
+
+
+/* =====================================================
+   5. ALIGN ITEMS
+   ===================================================== */
+
+.align-demo {
+
+    height: 200px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-around;
+
+    border: 3px solid #333;
+
+}
+
+.align-item {
+
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #a2d2ff;
+
+}
+
+
+/* =====================================================
+   6. GRID
+   ===================================================== */
+
+.grid-container {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+}
+
+.grid-container div {
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: #caffbf;
+
+    border: 2px solid #333;
+
+}
+
+
+/* =====================================================
+   7. STATIC
+   ===================================================== */
+
+.position-area {
+
+    height: 180px;
+
+    border: 3px dashed #999;
+
+    padding: 20px;
+
+}
+
+.position-box {
+
+    width: 120px;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffafcc;
+
+    border: 2px solid #333;
+
+}
+
+.static {
+
+    position: static;
+
+}
+
+
+/* =====================================================
+   8. RELATIVE
+   ===================================================== */
+
+.normal {
+
+    margin-bottom: 20px;
+
+}
+
+.relative {
+
+    position: relative;
+
+    left: 100px;
+    top: 10px;
+
+    background: #ffd166;
+
+}
+
+
+/* =====================================================
+   9. ABSOLUTE
+   ===================================================== */
+
+.absolute-parent {
+
+    position: relative;
+
+    height: 250px;
+
+    border: 4px solid #333;
+
+    background: #eee;
+
+}
+
+.parent-label {
+
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    font-weight: bold;
+
+}
+
+.absolute-child {
+
+    position: absolute;
+
+    right: 20px;
+    bottom: 20px;
+
+    width: 150px;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ff595e;
+
+    color: white;
+
+    border: 3px solid #333;
+
+}
+
+
+/* =====================================================
+   10. RELATIVE + ABSOLUTE
+   ===================================================== */
+
+.card {
+
+    position: relative;
+
+    width: 350px;
+
+    padding: 30px;
+
+    background: #f1f1f1;
+
+    border: 2px solid #333;
+
+}
+
+.card-content {
+
+    padding-right: 50px;
+
+}
+
+.badge {
+
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    padding: 8px 12px;
+
+    background: #ff595e;
+
+    color: white;
+
     font-size: 12px;
+    font-weight: bold;
+
 }
 
-.hero-buttons {
-    margin-top: 25px;
+
+/* =====================================================
+   11. FIXED
+   ===================================================== */
+
+.large-section {
+
+    min-height: 500px;
+
 }
 
-.hero-buttons button {
-    padding: 12px 18px;
-    margin-right: 5px;
-} */
+.fake-content {
+
+    margin-top: 50px;
+
+    line-height: 3;
+
+}
+
+.fixed-button {
+
+    position: fixed;
+
+    right: 30px;
+    bottom: 30px;
+
+    padding: 20px 30px;
+
+    background: #222;
+
+    color: white;
+
+    border-radius: 10px;
+
+    z-index: 100;
+
+}
+
+
+/* =====================================================
+   12. STICKY
+   ===================================================== */
+
+.sticky-container {
+
+    height: 300px;
+
+    overflow-y: auto;
+
+    border: 3px solid #333;
+
+}
+
+.sticky-header {
+
+    position: sticky;
+
+    top: 0;
+
+    padding: 20px;
+
+    background: #ffd166;
+
+    border-bottom: 2px solid #333;
+
+    font-weight: bold;
+
+}
+
+.sticky-content {
+
+    padding: 20px;
+
+}
+
+.sticky-content p {
+
+    height: 100px;
+
+}
+
+
+/* =====================================================
+   13. MARGIN
+   ===================================================== */
+
+.margin-demo {
+
+    background: #ff595e;
+
+    padding: 10px;
+
+}
+
+.margin-box {
+
+    margin: 50px;
+
+    padding: 30px;
+
+    background: white;
+
+    border: 3px solid #333;
+
+}
+
+
+/* =====================================================
+   14. PADDING
+   ===================================================== */
+
+.padding-demo {
+
+    background: #ff595e;
+
+    padding: 30px;
+
+}
+
+.padding-box {
+
+    padding: 50px;
+
+    background: white;
+
+    border: 3px solid #333;
+
+}
+
+
+/* =====================================================
+   15. OVERFLOW
+   ===================================================== */
+
+.overflow-demo {
+
+    width: 100%;
+
+    height: 120px;
+
+    padding: 20px;
+
+    overflow: auto;
+
+    border: 3px solid #333;
+
+}
+
+
+/* =====================================================
+   16. Z-INDEX
+   ===================================================== */
+
+.z-index-area {
+
+    position: relative;
+
+    height: 250px;
+
+}
+
+.z-box {
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-weight: bold;
+
+}
+
+.red {
+
+    top: 20px;
+    left: 100px;
+
+    background: #ff595e;
+
+    z-index: 1;
+
+}
+
+.blue {
+
+    top: 70px;
+    left: 180px;
+
+    background: #1982c4;
+
+    z-index: 2;
+
+}
+
+
+/* =====================================================
+   17. FLOAT
+   ===================================================== */
+
+.float-area {
+
+    padding: 20px;
+
+    border: 3px solid #333;
+
+}
+
+.float-box {
+
+    float: left;
+
+    width: 120px;
+    height: 120px;
+
+    margin-right: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #6a4c93;
+
+    color: white;
+
+}
+
+.clear {
+
+    clear: both;
+
+}

@@ -801,6 +801,32 @@ Biasanya untuk **global reset atau aturan dasar**.
 
 Jangan menggunakan `*` jika sebenarnya hanya beberapa element yang ingin diberi style.
 
+Selector `*` hanya memilih element HTML, bukan pseudo-element seperti `::before` dan `::after`. Karena itu, reset global sering memasukkan ketiganya sebagai daftar selector:
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+```
+
+Tanda koma berarti **"atau"**: rule berlaku pada semua element, atau pseudo-element `before` dari setiap element, atau pseudo-element `after` dari setiap element. `box-sizing: border-box` membuat ukuran yang ditetapkan pada element mencakup padding dan border, sehingga perhitungan layout lebih mudah diperkirakan.
+
+---
+
+### Cara membaca selector yang dikelompokkan
+
+```css
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+```
+
+Bacanya: "Pilih semua element, semua pseudo-element `before`, dan semua pseudo-element `after`, lalu atur `box-sizing` menjadi `border-box`."
+
+`::before` dan `::after` tanpa nama element di depannya berlaku pada pseudo-element yang dihasilkan untuk setiap element yang mendukungnya. Bentuk yang menulis `*::before` dan `*::after` menyatakan sasaran yang sama dengan lebih eksplisit, sehingga sering dipakai pada reset CSS.
+
 ---
 
 # 9.5 Grouping Selector
@@ -15403,6 +15429,82 @@ Transform sering digunakan untuk memberi respons visual pada interaksi. `transit
 
 ---
 
+## 9.1. Contoh Implementasi pada Kartu Produk
+
+Contoh berikut menggabungkan transform yang umum dipakai pada komponen antarmuka:
+
+```html
+<article class="product-card">
+  <div class="product-card__image">
+    <img src="headphones.jpg" alt="Headphone hitam">
+  </div>
+  <span class="product-card__badge">Baru</span>
+  <h2>Headphone</h2>
+  <a href="/products/headphones">Lihat produk</a>
+</article>
+```
+
+```css
+.product-card {
+  position: relative;
+}
+
+.product-card__image {
+  overflow: hidden;
+}
+
+.product-card__image img {
+  display: block;
+  width: 100%;
+  transition: transform 200ms ease;
+}
+
+.product-card:hover .product-card__image img {
+  transform: scale(1.05);
+}
+
+.product-card__badge {
+  display: inline-block;
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  transform: rotate(-6deg);
+}
+
+.product-card a {
+  display: inline-block;
+  transition: transform 200ms ease;
+}
+
+.product-card a:hover {
+  transform: translateY(-2px);
+}
+```
+
+Contoh implementasi `skew()` untuk label promo:
+
+```html
+<span class="promo-label"><span>Diskon</span></span>
+```
+
+```css
+.promo-label {
+  display: inline-block;
+  transform: skewX(-8deg);
+}
+
+.promo-label > span {
+  display: inline-block;
+  transform: skewX(8deg);
+}
+```
+
+`skewX(-8deg)` memiringkan bidang label; skew berlawanan pada teks menjaga tulisan tetap tegak. Wrapper dan teks sama-sama `inline-block` agar transform dapat diterapkan dengan jelas. Contoh-contoh ini mengubah tampilan saja, bukan ruang layout yang disediakan untuk komponen.
+
+`matrix()` tetap dibahas untuk memahami representasi transformasi atau membaca nilai yang dihasilkan tool, tetapi untuk implementasi sehari-hari gunakan fungsi bernama seperti `translate()`, `rotate()`, `scale()`, dan `skew()` agar maksud kode jelas.
+
+---
+
 # 10. Transform vs Layout
 
 Transform tidak mengubah ukuran atau posisi layout yang dipakai browser untuk menata element lain.
@@ -15910,7 +16012,7 @@ Mencocokkan element berdasarkan adanya descendant atau sibling yang memenuhi sel
 
 ## `::before` dan `::after`
 
-Membuat bagian pseudo-element sebelum atau sesudah content element:
+`::before` dan `::after` menargetkan pseudo-element yang dihasilkan di dalam element yang dipilih. `::before` berada sebelum content lain di dalam element; `::after` berada sesudah content tersebut. Keduanya bukan tag HTML dan tidak membuat element baru di source HTML.
 
 ```css
 .required-label::after {
@@ -15919,7 +16021,35 @@ Membuat bagian pseudo-element sebelum atau sesudah content element:
 }
 ```
 
-Mengapa `content` diperlukan? `::before` dan `::after` tidak membuat element HTML baru; property `content` menentukan isi pseudo-element. Pada contoh, panah hanyalah ornamen visual. Gunakan terutama untuk ornamen atau penanda visual yang tidak penting. Informasi penting seperti status "wajib" harus tersedia dalam HTML dan label, agar tidak hilang saat CSS gagal dimuat atau tidak terbaca konsisten oleh teknologi bantu.
+Cara membaca contoh: pilih element dengan class `required-label`, lalu buat content panah setelah content element tersebut. Property `content` menentukan isi pseudo-element; tanpa `content` yang sesuai, pseudo-element biasanya tidak tampil. Pada contoh, panah hanyalah ornamen visual. Gunakan terutama untuk ornamen atau penanda visual yang tidak penting. Informasi penting seperti status "wajib" harus tersedia dalam HTML dan label, agar tidak hilang saat CSS gagal dimuat atau tidak terbaca konsisten oleh teknologi bantu.
+
+### Contoh selector universal bersama pseudo-element
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+```
+
+Tanda koma memisahkan tiga selector yang berdiri sendiri, bukan berarti satu element harus memenuhi ketiganya sekaligus:
+
+* `*` memilih semua element.
+* `*::before` memilih pseudo-element `before` dari setiap element.
+* `*::after` memilih pseudo-element `after` dari setiap element.
+
+Bacanya: "Terapkan `box-sizing: border-box` ke semua element dan kedua pseudo-element tersebut." Selector universal `*` saja tidak mencakup pseudo-element, sehingga keduanya ditulis terpisah pada reset ini. `box-sizing: border-box` membuat ukuran yang ditetapkan mencakup padding dan border.
+
+Penulisan berikut juga valid:
+
+```css
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+```
+
+Di sini `::before` dan `::after` tanpa selector element di depannya juga menargetkan pseudo-element yang sesuai pada semua element. Penulisan `*::before` dan `*::after` sering dipilih agar cakupannya lebih mudah dibaca.
 
 ## `::first-letter` dan `::first-line`
 

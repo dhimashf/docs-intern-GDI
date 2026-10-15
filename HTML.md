@@ -995,6 +995,146 @@ Bermanfaat ketika:
 * screen reader membaca halaman
 * image perlu dideskripsikan secara tekstual
 
+## Attribute Pemuatan Image
+
+Beberapa attribute memberi browser petunjuk tentang kapan image dimuat dan bagaimana image diproses. Ini adalah **attribute HTML**, bukan properti CSS.
+
+### `loading`
+
+`loading` mengatur strategi pemuatan resource:
+
+* `loading="lazy"` menunda pemuatan image sampai image diperkirakan akan mendekati area layar. Gunakan untuk image di bagian bawah halaman agar tidak membebani pemuatan awal.
+* `loading="eager"` meminta image dimuat segera. Ini adalah perilaku default jika `loading` tidak ditulis, dan cocok untuk image yang langsung terlihat.
+
+```html
+<img
+  src="article-photo.jpg"
+  alt="Pemandangan pantai saat matahari terbenam"
+  loading="lazy"
+>
+```
+
+Jangan gunakan `lazy` untuk image utama yang langsung terlihat saat halaman dibuka; penundaan dapat membuatnya terlambat tampil. `loading` adalah petunjuk kepada browser, bukan jaminan waktu pemuatan yang persis.
+
+`loading` juga berlaku pada `<iframe>`. Misalnya, embed peta atau video yang jauh di bawah halaman dapat ditunda:
+
+```html
+<iframe
+  src="https://example.com/embed"
+  title="Peta lokasi kantor"
+  loading="lazy"
+></iframe>
+```
+
+Berikan `title` yang menjelaskan isi iframe agar pengguna screen reader mengetahui konten embed tersebut.
+
+### `decoding`
+
+`decoding` memberi petunjuk tentang kapan browser mendekode image sebelum menampilkannya:
+
+* `async` mengizinkan browser mendekode image tanpa menahan rendering konten lain.
+* `sync` meminta image didekode secara sinkron bersama rendering berikutnya.
+* `auto` menyerahkan pilihan kepada browser; ini adalah nilai default.
+
+```html
+<img
+  src="article-photo.jpg"
+  alt="Pemandangan pantai saat matahari terbenam"
+  decoding="async"
+>
+```
+
+### `fetchpriority`
+
+`fetchpriority` memberi petunjuk prioritas pengambilan resource:
+
+* `high` untuk resource penting yang perlu didahulukan, misalnya image hero utama yang terlihat sejak awal.
+* `low` untuk resource yang kurang penting.
+* `auto` menyerahkan prioritas kepada browser dan merupakan nilai default.
+
+```html
+<img
+  src="hero.jpg"
+  alt="Pegunungan saat matahari terbit"
+  fetchpriority="high"
+>
+```
+
+Gunakan `high` secara selektif pada image penting; menaikkan prioritas banyak image sekaligus mengurangi manfaat petunjuk ini.
+
+### `width` dan `height`
+
+`width` dan `height` menyatakan dimensi intrinsik image dalam piksel. Browser dapat memakai rasio dimensinya untuk menyediakan ruang sebelum file selesai dimuat, sehingga tata letak tidak banyak bergeser.
+
+```html
+<img
+  src="article-photo.jpg"
+  alt="Pemandangan pantai saat matahari terbenam"
+  width="1200"
+  height="800"
+  loading="lazy"
+>
+```
+
+Nilai tersebut sebaiknya sesuai dengan dimensi atau rasio asli image. Ukuran tampilan tetap dapat disesuaikan dengan CSS tanpa mengubah rasio:
+
+```css
+img {
+  max-width: 100%;
+  height: auto;
+}
+```
+
+## Image Responsif: `srcset`, `sizes`, dan `<picture>`
+
+Image responsif memungkinkan browser memilih file gambar yang sesuai dengan ukuran tampilan atau kondisi perangkat. Ini dapat menghindari pengiriman file besar ke layar kecil, atau gambar yang kurang tajam ke layar beresolusi tinggi.
+
+### `srcset` dan `sizes`
+
+`srcset` mencantumkan beberapa kandidat file gambar. Dengan **width descriptor** seperti `480w`, `sizes` memberi tahu browser perkiraan lebar image yang akan ditampilkan pada berbagai kondisi. Browser menggunakan informasi itu bersama ukuran viewport dan kepadatan layar untuk memilih kandidat.
+
+```html
+<img
+  src="photo-800.jpg"
+  srcset="photo-480.jpg 480w, photo-800.jpg 800w, photo-1200.jpg 1200w"
+  sizes="(max-width: 600px) 100vw, 800px"
+  alt="Pemandangan pegunungan"
+  width="1200"
+  height="800"
+  loading="lazy"
+>
+```
+
+`100vw` berarti image diperkirakan selebar viewport pada layar hingga 600px; di atas ukuran itu, image diperkirakan selebar 800px. Kandidat pada `srcset` harus menggambarkan file dengan lebar intrinsik yang sesuai dengan descriptor-nya. `src` tetap menjadi fallback.
+
+Untuk kandidat yang dibedakan berdasarkan kepadatan pixel, `srcset` juga dapat menggunakan descriptor `1x`, `2x`, dan seterusnya. Jangan mencampur descriptor `w` dan `x` dalam satu nilai `srcset`.
+
+### `<picture>` dan `<source>`
+
+Gunakan `<picture>` ketika browser perlu memilih format file atau komposisi/crop gambar yang berbeda berdasarkan kondisi. Setiap `<source>` menyediakan pilihan; `<img>` di dalamnya tetap menjadi fallback sekaligus tempat menulis `alt`, `width`, dan `height`.
+
+```html
+<picture>
+  <source
+    srcset="landscape.avif"
+    type="image/avif"
+  >
+  <source
+    srcset="landscape.webp"
+    type="image/webp"
+  >
+  <img
+    src="landscape.jpg"
+    alt="Pegunungan di bawah langit senja"
+    width="1200"
+    height="800"
+    loading="lazy"
+  >
+</picture>
+```
+
+Browser memilih source pertama yang didukung; jika tidak ada yang cocok, browser memakai `src` pada `<img>`. Attribute `media` pada `<source>` dapat dipakai untuk memilih gambar berbeda pada kondisi media tertentu, misalnya crop portrait untuk layar sempit. Jangan menambahkan `alt` ke `<source>`—teks alternatif berada pada `<img>`.
+
 ### Fundamental Insight
 
 `src` menjawab:
@@ -1164,6 +1304,22 @@ Teks di antara tag adalah label yang dilihat pengguna; nilai `href` adalah alama
 ```
 
 `href="#contact"` mengarah ke element dengan `id="contact"`. Pastikan `id` tujuan ada dan unik di halaman.
+
+### `target` dan `rel` pada tautan
+
+`target="_blank"` meminta browser membuka tujuan tautan di konteks penjelajahan baru, biasanya tab baru. Pada tautan eksternal, `rel="noreferrer"` mencegah browser mengirim alamat halaman asal melalui header `Referer`. Ini membantu menjaga privasi pengguna. `noreferrer` juga memiliki efek `noopener`: halaman yang dibuka tidak mendapat akses melalui `window.opener` ke halaman asal.
+
+```html
+<a
+  href="https://example.com"
+  target="_blank"
+  rel="noreferrer"
+>
+  Buka situs contoh
+</a>
+```
+
+Jika hanya perlu memutus akses `window.opener` tanpa menyembunyikan informasi referrer, gunakan `rel="noopener"`. `noopener` sendiri tidak menyembunyikan referrer. Untuk dukungan browser modern, `target="_blank"` secara default juga berperilaku seperti `noopener`, tetapi menulis `rel` secara eksplisit membuat maksud keamanan dan privasi lebih jelas.
 
 Jangan samakan `href` dengan `src`: `href` menyatakan hubungan atau tujuan yang dapat diikuti, seperti halaman tujuan `<a>` atau stylesheet yang dirujuk `<link>`. `src` menyatakan resource yang disematkan atau dimuat oleh element, seperti gambar di `<img>`. Jadi, link ke halaman lain biasanya memakai `<a href>`, sedangkan gambar yang tampil di halaman memakai `<img src>`.
 
@@ -6223,7 +6379,48 @@ karena HTML secara eksplisit menyatakan bahwa teks tersebut adalah caption dari 
 
 ---
 
-# 14. `<time>` — Menandai Waktu/Tanggal
+# 14. `<blockquote>` — Kutipan Panjang
+
+`<blockquote>` menandai kutipan yang diambil dari sumber lain dan disajikan sebagai blok terpisah. Element ini menyampaikan makna kutipan, bukan sekadar membuat teks menjorok.
+
+```html
+<blockquote cite="https://example.com/article">
+  <p>
+    Aksesibilitas perlu dipertimbangkan sejak awal saat merancang sebuah halaman.
+  </p>
+</blockquote>
+```
+
+Attribute `cite` dapat berisi URL sumber kutipan, tetapi alamat itu tidak otomatis ditampilkan kepada pengguna. Cantumkan atribusi yang terlihat, misalnya dengan tautan:
+
+```html
+<figure>
+  <blockquote cite="https://example.com/article">
+    <p>
+      Aksesibilitas perlu dipertimbangkan sejak awal saat merancang sebuah halaman.
+    </p>
+  </blockquote>
+  <figcaption>
+    — Dari <cite><a href="https://example.com/article">Panduan Aksesibilitas</a></cite>
+  </figcaption>
+</figure>
+```
+
+`<cite>` di contoh menandai judul karya yang dirujuk. Jangan gunakan `<blockquote>` hanya untuk indentasi atau tampilan; atur tampilan kutipan dengan CSS.
+
+Untuk kutipan pendek yang berada di dalam kalimat, gunakan `<q>`:
+
+```html
+<p>
+  Panduan tersebut menyebut, <q>aksesibilitas adalah tanggung jawab bersama</q>.
+</p>
+```
+
+Browser biasanya menambahkan tanda kutip pada `<q>` secara otomatis. Jangan menambahkan tanda kutip lagi kecuali memang diperlukan oleh gaya penulisan.
+
+---
+
+# 15. `<time>` — Menandai Waktu/Tanggal
 
 ```html
 <time datetime="2026-10-06">
@@ -6264,7 +6461,7 @@ format waktu yang dipahami mesin
 
 ---
 
-# 15. `<address>` — Informasi Kontak
+# 16. `<address>` — Informasi Kontak
 
 ```html
 <address>
@@ -6292,7 +6489,7 @@ Jika berada di dalam `<article>`, informasi kontaknya berkaitan dengan penulis a
 
 ---
 
-# 16. `<details>` dan `<summary>`
+# 17. `<details>` dan `<summary>`
 
 HTML juga menyediakan semantic element untuk content yang dapat dibuka/tutup.
 
@@ -6333,7 +6530,7 @@ Secara default, content di dalam `<details>` tertutup dan bisa dibuka dengan mem
 
 ---
 
-# 17. Struktur Semantic Website
+# 18. Struktur Semantic Website
 
 Contoh struktur halaman sederhana:
 
@@ -6417,7 +6614,7 @@ Ini adalah salah satu tujuan utama semantic HTML:
 
 ---
 
-# 18. Semantic HTML Tidak Berarti Tidak Boleh Menggunakan `<div>`
+# 19. Semantic HTML Tidak Berarti Tidak Boleh Menggunakan `<div>`
 
 `<div>` bukan elemen yang buruk.
 
@@ -6469,7 +6666,7 @@ Ada semantic element yang tepat?
 
 ---
 
-# 19. Semantic HTML vs CSS
+# 20. Semantic HTML vs CSS
 
 Semantic HTML tidak menentukan tampilan.
 
@@ -6519,7 +6716,7 @@ CSS tetap bertanggung jawab untuk:
 
 ---
 
-# 20. Semantic HTML vs `<div>`
+# 21. Semantic HTML vs `<div>`
 
 | Elemen         | Makna                             |
 | -------------- | --------------------------------- |
@@ -6538,7 +6735,7 @@ CSS tetap bertanggung jawab untuk:
 
 ---
 
-# 21. `<section>` vs `<div>`
+# 22. `<section>` vs `<div>`
 
 Ini juga sering membingungkan.
 
@@ -6575,7 +6772,7 @@ Mental model:
 
 ---
 
-# 22. `<article>` vs `<section>` vs `<div>`
+# 23. `<article>` vs `<section>` vs `<div>`
 
 | Elemen      | Cara berpikir                               |
 | ----------- | ------------------------------------------- |
@@ -6610,7 +6807,7 @@ Blog
 
 ---
 
-# 23. Heading dan Semantic Structure
+# 24. Heading dan Semantic Structure
 
 Semantic HTML juga berkaitan dengan heading.
 
@@ -6654,7 +6851,7 @@ CSS menentukan **visual**.
 
 ---
 
-# 24. Semantic HTML dan Accessibility
+# 25. Semantic HTML dan Accessibility
 
 Semantic HTML membantu accessibility karena browser dan assistive technology dapat mengenali peran bagian halaman dengan lebih jelas.
 
@@ -6664,7 +6861,7 @@ Contohnya, `<nav>` menyatakan bahwa bagian tersebut berisi navigasi, sedangkan `
 
 ---
 
-# 25. Semantic HTML dan SEO
+# 26. Semantic HTML dan SEO
 
 Search engine tidak hanya melihat tampilan visual halaman.
 
@@ -6703,7 +6900,7 @@ SEO tetap dipengaruhi banyak faktor lain seperti:
 
 ---
 
-# 26. Cara Memilih Semantic Element
+# 27. Cara Memilih Semantic Element
 
 Jangan mulai dengan:
 
@@ -6767,7 +6964,7 @@ Ini jauh lebih berguna daripada menghafalkan definisi setiap tag secara terpisah
 
 ---
 
-# 27. Cause → Effect
+# 28. Cause → Effect
 
 ### Menggunakan `<nav>`
 
@@ -6859,7 +7056,7 @@ tanpa memberi peran semantic khusus.
 
 ---
 
-# 28. Semantic HTML Cheat Sheet
+# 29. Semantic HTML Cheat Sheet
 
 ```text
 <header>
@@ -6910,7 +7107,7 @@ tanpa memberi peran semantic khusus.
 
 ---
 
-# 29. Mental Model Utama
+# 30. Mental Model Utama
 
 Bayangkan sebuah website seperti **sebuah dokumen yang memiliki struktur organisasi**.
 
@@ -6958,7 +7155,7 @@ CSS mengatur tampilannya
 
 ---
 
-# 30. Self Check
+# 31. Self Check
 
 Sebelum membuat sebuah container, coba tentukan:
 
@@ -7002,7 +7199,7 @@ Jika bisa menentukan elemen dari **makna content**, berarti konsep semantic HTML
 
 ---
 
-# 31. Key Takeaway
+# 32. Key Takeaway
 
 1. Semantic HTML berarti memilih element berdasarkan **makna**, bukan tampilan.
 2. `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, dan `<footer>` membantu membentuk struktur halaman yang bermakna.

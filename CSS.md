@@ -5,15 +5,23 @@ Materi gabungan dari seluruh bab CSS; file sumber per bab tetap disimpan.
 ## Daftar Isi
 
 1. [CSS Dasar — Setup, Syntax, Selectors & Visual Rules](#css-bab-1)
+   - [Universal selector dan pseudo-element](#css-universal-pseudo-reset)
+   - [CSS Custom Properties (Variabel CSS)](#css-custom-properties)
 2. [CSS — Box Model, Changing the Box Model & DevTools](#css-bab-2)
 3. [CSS — Display & Positioning](#css-bab-3)
 4. [CSS — Colors](#css-bab-4)
 5. [CSS — Typography](#css-bab-5)
 6. [CSS — Layout with Flexbox](#css-bab-6)
 7. [CSS — Layout with Grid](#css-bab-7)
+   - [`grid-template-columns` dan `repeat()`](#css-grid-repeat-columns)
+   - [`grid-column` dan grid line](#css-grid-column-lines)
+   - [`grid-auto-flow: column`](#css-grid-auto-flow-column)
 8. [CSS — Transforms](#css-bab-8)
+   - [`scale()`](#css-transform-scale)
+   - [Contoh implementasi `translate()`, `rotate()`, `scale()`, dan `skew()`](#css-transform-product-example)
 9. [CSS — Pseudo-class dan Pseudo-element](#css-bab-9)
-10. [CSS Custom Properties (Variabel CSS)](#css-custom-properties)
+   - [`:nth-of-type()`](#css-nth-of-type-explained)
+   - [`::before` dan `::after`](#css-before-after-explained)
 
 ---
 
@@ -800,6 +808,8 @@ Artinya rule tersebut berlaku ke seluruh element.
 Biasanya untuk **global reset atau aturan dasar**.
 
 Jangan menggunakan `*` jika sebenarnya hanya beberapa element yang ingin diberi style.
+
+<a id="css-universal-pseudo-reset"></a>
 
 Selector `*` hanya memilih element HTML, bukan pseudo-element seperti `::before` dan `::after`. Karena itu, reset global sering memasukkan ketiganya sebagai daftar selector:
 
@@ -14095,6 +14105,8 @@ Istilah ini berguna saat menentukan ukuran track atau menempatkan item pada bari
 
 ---
 
+<a id="css-grid-repeat-columns"></a>
+
 # 5. `grid-template-columns`
 
 `grid-template-columns` menentukan ukuran kolom.
@@ -14298,6 +14310,8 @@ Jika hanya ada satu nilai, nilai itu berlaku untuk keduanya:
 ```
 
 ---
+
+<a id="css-grid-column-lines"></a>
 
 # 10. Menentukan Posisi Item dengan Grid Line
 
@@ -14572,6 +14586,8 @@ Atur ukuran track tambahan dengan:
   grid-auto-rows: 120px;
 }
 ```
+
+<a id="css-grid-auto-flow-column"></a>
 
 `grid-auto-columns` mengatur ukuran kolom implicit, sedangkan `grid-auto-flow` mengatur arah penempatan otomatis item.
 
@@ -15276,6 +15292,8 @@ Secara default, element berputar pada titik tengahnya. Gunakan `transform-origin
 
 ---
 
+<a id="css-transform-scale"></a>
+
 # 5. `scale()` — Mengubah Ukuran Element
 
 `scale()` mengubah ukuran element berdasarkan faktor pengali:
@@ -15428,6 +15446,8 @@ Transform sering digunakan untuk memberi respons visual pada interaksi. `transit
 `transform` menentukan perubahan visual, sedangkan `transition` mengatur durasi dan cara perubahan itu berlangsung. Keduanya adalah property yang berbeda.
 
 ---
+
+<a id="css-transform-product-example"></a>
 
 ## 9.1. Contoh Implementasi pada Kartu Produk
 
@@ -15868,6 +15888,8 @@ Paragraf terakhir tetap dipilih walaupun `<footer>` muncul setelahnya. Sebalikny
 
 > `of-type` mengacu pada nama element/tag, bukan class. Untuk item komponen berdasarkan class, pertimbangkan selector seperti `.item:last-child`, atau struktur/class eksplisit yang menyatakan peran tersebut.
 
+<a id="css-nth-of-type-explained"></a>
+
 ## `:nth-child()` dan `:nth-of-type()`
 
 Keduanya menerima pola urutan:
@@ -16009,6 +16031,8 @@ Mencocokkan element berdasarkan adanya descendant atau sibling yang memenuhi sel
 ---
 
 # 7. Pseudo-element Umum
+
+<a id="css-before-after-explained"></a>
 
 ## `::before` dan `::after`
 

@@ -5,9 +5,13 @@ Materi gabungan dari seluruh bab HTML; file sumber per bab tetap disimpan.
 ## Daftar Isi
 
 1. [HTML — Elements and Structure](#html-bab-1)
+   - [Image loading dan atribut pemuatan](#html-image-loading-attributes)
+   - [Image responsif: `srcset`, `sizes`, dan `<picture>`](#html-responsive-images)
+   - [`target` dan `rel="noreferrer"`](#html-target-rel-noreferrer)
 2. [HTML — Tables](#html-bab-2)
 3. [HTML — Forms & Client-Side Validation](#html-bab-3)
 4. [HTML — Semantic HTML](#html-bab-4)
+   - [`<blockquote>` dan kutipan inline `<q>`](#html-blockquote)
 5. [HTML — Accessibility](#html-bab-5)
 
 ---
@@ -995,6 +999,8 @@ Bermanfaat ketika:
 * screen reader membaca halaman
 * image perlu dideskripsikan secara tekstual
 
+<a id="html-image-loading-attributes"></a>
+
 ## Attribute Pemuatan Image
 
 Beberapa attribute memberi browser petunjuk tentang kapan image dimuat dan bagaimana image diproses. Ini adalah **attribute HTML**, bukan properti CSS.
@@ -1084,6 +1090,8 @@ img {
   height: auto;
 }
 ```
+
+<a id="html-responsive-images"></a>
 
 ## Image Responsif: `srcset`, `sizes`, dan `<picture>`
 
@@ -1304,6 +1312,8 @@ Teks di antara tag adalah label yang dilihat pengguna; nilai `href` adalah alama
 ```
 
 `href="#contact"` mengarah ke element dengan `id="contact"`. Pastikan `id` tujuan ada dan unik di halaman.
+
+<a id="html-target-rel-noreferrer"></a>
 
 ### `target` dan `rel` pada tautan
 
@@ -6378,6 +6388,8 @@ Ini lebih bermakna daripada sekadar:
 karena HTML secara eksplisit menyatakan bahwa teks tersebut adalah caption dari figure.
 
 ---
+
+<a id="html-blockquote"></a>
 
 # 14. `<blockquote>` — Kutipan Panjang
 

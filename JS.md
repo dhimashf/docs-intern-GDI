@@ -2,7 +2,7 @@
 
 Panduan ini mengajak pembaca belajar JavaScript secara bertahap, mulai dari dasar, lanjut ke materi intermediate, lalu melihat cara kerja bahasa dan runtime di balik layar. Urutannya mengikuti alur belajar umum kurikulum JavaScript Codecademy, dengan penjelasan dan contoh yang ditulis ulang.
 
-Panduan ini cocok untuk pemula, termasuk yang belum pernah menjadi programmer. Istilah teknis dijelaskan saat pertama kali muncul. Contoh-contohnya bisa dicoba di console browser atau Node.js.
+Panduan ini cocok untuk pemula, termasuk yang belum pernah menjadi programmer. Istilah teknis dijelaskan saat pertama kali muncul, dan contoh dimulai dari hal dasar sebelum masuk ke topik lanjutan. Contoh JavaScript dasar bisa dicoba di console browser atau Node.js. Contoh yang memakai `document` atau elemen halaman adalah materi DOM dan perlu dijalankan di browser; lihat [panduan JavaScript DOM](JS-DOM.md).
 
 ## Daftar Isi
 
@@ -22,20 +22,7 @@ Panduan ini cocok untuk pemula, termasuk yang belum pernah menjadi programmer. I
    - [Built-in penting: Map, Set, Date, JSON, RegExp, dan Intl](#js-builtins)
    - [Error handling dan debugging](#js-error-debugging)
       - [Jenis error JavaScript](#js-error-types)
-   - [DOM: menghubungkan JavaScript dengan halaman web](#js-dom)
-      - [DOM tree, node, dan element](#js-dom-tree)
-      - [Memilih elemen dan membaca kumpulan hasil](#js-dom-select)
-      - [Membaca dan mengubah konten](#js-dom-content)
-      - [Atribut, property, dan data attribute](#js-dom-attributes)
-      - [Class dan style](#js-dom-style)
-      - [Membuat, menyisipkan, menggandakan, dan menghapus elemen](#js-dom-create)
-      - [Event dan event listener](#js-dom-events)
-      - [Event propagation dan delegation](#js-dom-propagation)
-      - [Form, input, dan validasi](#js-dom-forms)
-      - [Navigasi DOM dan traversal](#js-dom-traversal)
-      - [Waktu pemuatan dokumen](#js-dom-ready)
-      - [Observer untuk perubahan DOM dan tampilan](#js-dom-observers)
-      - [Performa, aksesibilitas, dan keamanan DOM](#js-dom-practices)
+   - [JavaScript DOM](JS-DOM.md#js-dom)
 2. [JavaScript Intermediate](#javascript-intermediate)
    - [Destructuring, spread, dan rest](#js-destructuring)
    - [Iterator dan higher-order function](#js-iterator)
@@ -1020,6 +1007,43 @@ console.log(daftarBaru); // ['apel', 'mangga', 'jeruk', 'pisang']
 
 Pilih `.push()` jika memang ingin memperbarui array asal. Pilih spread jika ingin menyimpan versi baru tanpa mengubah array sebelumnya.
 
+### Method Array yang sering dipakai
+
+Array punya banyak method. Untuk mulai, pahami dulu beberapa method ini. Bayangkan `nilai` sebagai daftar angka:
+
+```js
+const nilai = [70, 85, 90, 60];
+
+nilai.push(95); // menambahkan 95 ke akhir daftar
+const nilaiPertama = nilai[0]; // membaca item pertama: 70
+const nilaiLulus = nilai.filter(angka => angka >= 75);
+const nilaiBonus = nilai.map(angka => angka + 5);
+const nilaiPertamaLulus = nilai.find(angka => angka >= 75);
+
+console.log(nilai); // [70, 85, 90, 60, 95]
+console.log(nilaiLulus); // [85, 90, 95]
+console.log(nilaiBonus); // [75, 90, 95, 65, 100]
+console.log(nilaiPertamaLulus); // 85
+```
+
+Arti method di atas:
+
+| Method | Arti sederhana | Mengubah array asal? |
+| --- | --- | --- |
+| `.push(item)` | Menambahkan item di akhir | Ya |
+| `.pop()` | Menghapus dan mengambil item terakhir | Ya |
+| `.includes(item)` | Memeriksa apakah item ada; hasilnya `true` atau `false` | Tidak |
+| `.find(syarat)` | Mengambil item pertama yang memenuhi syarat | Tidak |
+| `.filter(syarat)` | Membuat array baru dari item yang memenuhi syarat | Tidak |
+| `.map(ubah)` | Membuat array baru dengan mengubah setiap item | Tidak |
+| `.forEach(aksi)` | Menjalankan aksi untuk setiap item, tanpa membuat array baru | Tidak |
+| `.slice(mulai, akhir)` | Mengambil sebagian item sebagai array baru; indeks akhir tidak ikut | Tidak |
+| `.splice(mulai, jumlah)` | Menghapus atau mengganti item dalam array | Ya |
+
+Di `.filter(angka => angka >= 75)`, `angka` mewakili satu item yang sedang diperiksa. Bagian setelah `=>` adalah syaratnya. `filter()` menyimpan item yang syaratnya bernilai `true`. `map()` berbeda: ia membuat nilai baru untuk setiap item. `find()` mirip `filter()`, tetapi hanya mengembalikan item pertama yang cocok.
+
+Jika masih baru belajar, mulai dengan `push`, `includes`, `find`, `filter`, dan `map`. Tabel-tabel di bawah mencantumkan method Array lain saat dibutuhkan.
+
 ### Cara membaca tabel Array
 
 Tabel berikut mengelompokkan method berdasarkan kegunaannya. Nama dalam tanda kurung, seperti `start` dan `end` pada `.slice(start, end)`, adalah parameter yang menunjukkan nilai apa saja yang bisa diberikan. Nilai yang kita masukkan saat memanggilnya disebut **argument**. Contohnya, pada `buah.slice(1, 3)`, angka `1` dan `3` adalah argument untuk parameter `start` dan `end`. Method `slice()` mengembalikan array baru tanpa mengubah `buah`. Kolom “Mengubah array asal?” memberi tahu apakah sebuah method mengubah array yang dipanggil atau menghasilkan nilai baru.
@@ -1291,6 +1315,62 @@ console.log(profil.alamat.kota); // tetap 'Jakarta'
 
 Jangan memakai `JSON.parse(JSON.stringify(value))` sebagai deep-copy universal karena cara itu menghilangkan atau gagal menangani beberapa tipe nilai JavaScript.
 
+### Membatasi perubahan dengan `Object.freeze()`
+
+Secara default, property object dapat ditambah, diubah, atau dihapus. `Object.freeze()` mencegah perubahan pada property tingkat pertama. Ini berguna, misalnya, saat sebuah object berisi pengaturan yang tidak ingin diubah setelah dibuat.
+
+```js
+const pengaturan = Object.freeze({
+  tema: 'terang',
+  ukuranTeks: 16
+});
+
+console.log(Object.isFrozen(pengaturan)); // true
+console.log(pengaturan.tema); // 'terang'
+```
+
+Setelah object dibekukan, kita tidak bisa menambah atau menghapus property, maupun mengubah nilainya. Dalam JavaScript module atau strict mode, upaya mengubahnya akan menghasilkan `TypeError`. Di script biasa yang tidak memakai strict mode, perubahan mungkin diabaikan. Karena itu, lebih baik periksa dengan `Object.isFrozen()` daripada mencoba mengubahnya.
+
+`Object.freeze()` mengembalikan object yang sama dan **hanya membekukan tingkat pertama**. Jika ada object di dalamnya, isi object di dalam itu masih bisa berubah:
+
+```js
+const pengguna = Object.freeze({
+  nama: 'Raka',
+  alamat: { kota: 'Bandung' }
+});
+
+pengguna.alamat.kota = 'Jakarta'; // masih bisa: alamat belum ikut dibekukan
+console.log(pengguna.alamat.kota); // 'Jakarta'
+```
+
+Untuk pemula, ingat bahwa `const` dan `Object.freeze()` punya fungsi berbeda: `const` mencegah variabel diarahkan ke nilai lain, tetapi tidak membekukan isi object. `Object.freeze()` membatasi perubahan property object tersebut.
+
+#### Perbedaan `freeze`, `seal`, dan `preventExtensions`
+
+Ketiganya membatasi perubahan object dengan tingkat yang berbeda:
+
+| Method | Menambah property | Menghapus property | Mengubah property yang sudah ada |
+| --- | --- | --- | --- |
+| `Object.preventExtensions(obj)` | Tidak | Ya | Ya |
+| `Object.seal(obj)` | Tidak | Tidak | Ya |
+| `Object.freeze(obj)` | Tidak | Tidak | Tidak |
+
+Method ini mengubah object yang diberikan, bukan membuat salinan. Jika tujuanmu hanya mencegah semua perubahan, gunakan `Object.freeze()`. `Object.isSealed()` dan `Object.isExtensible()` dapat dipakai untuk memeriksa keadaan object; untuk memeriksa object beku, gunakan `Object.isFrozen()`.
+
+Contoh singkat:
+
+```js
+const akun = { nama: 'Raka' };
+Object.seal(akun);
+
+akun.nama = 'Dina'; // masih boleh mengubah property yang sudah ada
+console.log(akun.nama); // 'Dina'
+
+console.log(Object.isSealed(akun)); // true
+```
+
+Object yang di-seal tidak bisa ditambah atau dihapus property-nya, tetapi nilai property yang sudah ada masih dapat diubah.
+
 ### Property object yang berguna
 
 | Fitur | Fungsi | Contoh |
@@ -1300,9 +1380,9 @@ Jangan memakai `JSON.parse(JSON.stringify(value))` sebagai deep-copy universal k
 | `Object.entries(obj)` | Mengambil pasangan `[key, value]` | `Object.entries({ a: 1 }); // [['a', 1]]` |
 | `Object.hasOwn(obj, key)` | Memeriksa apakah object punya key tersebut secara langsung | `Object.hasOwn({ a: 1 }, 'a'); // true` |
 | `Object.assign(target, source)` | Menyalin property tingkat pertama ke target | `Object.assign({}, { a: 1 }); // { a: 1 }` |
-| `Object.freeze(obj)` | Mencegah perubahan property tingkat pertama | `Object.freeze(obj)` |
+| `Object.freeze(obj)` | Membekukan property tingkat pertama; lihat contoh di atas | `Object.freeze({ tema: 'terang' })` |
 
-`Object.freeze()` juga bersifat dangkal: object di dalam object masih dapat diubah kecuali ikut dibekukan. Gunakan `Object.hasOwn()` untuk mengecek kepemilikan property; ini lebih aman daripada memanggil method `hasOwnProperty()` langsung pada object dari sumber yang tidak dikenal.
+`Object.hasOwn(obj, key)` berguna untuk memeriksa apakah property memang dimiliki langsung oleh object, bukan diwarisi dari object lain. Ini lebih aman daripada memanggil `hasOwnProperty()` langsung pada object yang berasal dari sumber tidak dikenal.
 
 <a id="js-builtins"></a>
 ## 1.11 Built-in penting: Map, Set, Date, JSON, RegExp, dan Intl
@@ -1528,481 +1608,9 @@ Tampilkan pesan yang mudah dipahami kepada pengguna, dan simpan detail teknis un
 Selain `console.log()`, gunakan breakpoint dan panel **Sources/Debugger** di Developer Tools untuk memeriksa nilai dan alur program langkah demi langkah.
 
 <a id="js-dom"></a>
-## 1.13 DOM: menghubungkan JavaScript dengan halaman web
+## 1.13 JavaScript DOM
 
-**DOM (Document Object Model)** adalah representasi halaman HTML yang dibuat browser dalam bentuk kumpulan object yang saling terhubung. JavaScript dapat membaca dan mengubah object tersebut, misalnya mengganti teks, menambah elemen, atau merespons klik. DOM disediakan oleh browser, bukan bagian dari bahasa JavaScript inti, sehingga kode DOM tidak langsung berjalan di Node.js biasa.
-
-Bayangkan HTML sebagai dokumen, lalu browser menyusunnya menjadi pohon elemen. Elemen di dalam elemen lain menjadi anak dari elemen tersebut. Object `document` menjadi pintu masuk utama untuk membaca dan mengubah halaman.
-
-```html
-<main>
-  <h1 id="judul">Daftar tugas</h1>
-  <p class="petunjuk">Belum ada tugas.</p>
-</main>
-```
-
-Dalam contoh ini, `<main>` menjadi elemen induk. `<h1>` dan `<p>` berada di dalamnya sebagai elemen anak. Atribut `id` dan `class` dapat dipakai untuk menemukan elemen dari JavaScript.
-
-<a id="js-dom-tree"></a>
-### DOM tree, node, dan element
-
-Browser membentuk HTML menjadi **DOM tree**, yaitu susunan node seperti pohon. `document` adalah node dokumen. Tag HTML menjadi **element node**; teks di dalam tag menjadi **text node**; komentar HTML juga menjadi node. Karena itu, `childNodes` dapat berisi teks dan komentar, sedangkan `children` hanya berisi element.
-
-```html
-<section id="kartu">
-  <h2>Belajar DOM</h2>
-  <!-- catatan -->
-</section>
-```
-
-```js
-const kartu = document.querySelector('#kartu');
-
-if (kartu) {
-  console.log(kartu.children.length); // 1 element: h2
-  console.log(kartu.childNodes.length); // termasuk spasi/baris baru dan komentar
-  console.log(kartu.firstElementChild?.tagName); // 'H2'
-}
-```
-
-Indentasi dan baris baru pada HTML dapat menjadi text node. Untuk pekerjaan sehari-hari, gunakan property berakhiran `Element` jika yang dicari hanya tag HTML. `Node` adalah istilah umum untuk bagian DOM, sedangkan `Element` adalah node yang mewakili tag.
-
-<a id="js-dom-select"></a>
-### Memilih elemen
-
-Gunakan `document.querySelector()` untuk mengambil elemen pertama yang cocok dengan CSS selector. Gunakan `document.querySelectorAll()` untuk mengambil semua elemen yang cocok.
-
-Selector umum:
-
-| Selector | Elemen yang dicari | Contoh |
-| --- | --- | --- |
-| `'#id'` | Elemen dengan ID tertentu | `document.querySelector('#judul')` |
-| `'.kelas'` | Elemen dengan class tertentu | `document.querySelectorAll('.item')` |
-| `'button'` | Semua tag dengan nama tersebut | `document.querySelectorAll('button')` |
-| `'form input'` | Input di dalam form | `document.querySelectorAll('form input')` |
-| `'[data-id]'` | Elemen dengan atribut tersebut | `document.querySelectorAll('[data-id]')` |
-| `'input[type="email"]'` | Input dengan atribut dan nilai tertentu | `document.querySelector('input[type="email"]')` |
-
-```js
-const judul = document.querySelector('#judul');
-const petunjuk = document.querySelector('.petunjuk');
-const semuaItem = document.querySelectorAll('.item');
-
-console.log(judul?.textContent); // 'Daftar tugas' jika elemen ditemukan
-console.log(semuaItem.length); // jumlah elemen dengan class item
-```
-
-Tanda `#` pada `'#judul'` berarti mencari elemen dengan `id="judul"`, sedangkan titik pada `'.petunjuk'` berarti mencari elemen dengan class `petunjuk`. `querySelector()` mengembalikan elemen pertama atau `null` jika tidak ditemukan. `querySelectorAll()` mengembalikan kumpulan elemen yang cocok, yang dapat diiterasi dengan `for...of` atau `.forEach()`.
-
-Ada juga method lama `document.getElementById('judul')` untuk mencari berdasarkan ID tanpa tanda `#`. Untuk contoh baru, `querySelector()` dan `querySelectorAll()` biasanya cukup karena keduanya mendukung berbagai selector CSS.
-
-Hasil `querySelectorAll()` berupa **static NodeList**: daftar itu tidak otomatis berubah ketika elemen baru ditambahkan setelah pencarian. Jalankan selector lagi jika perlu membaca elemen terbaru. Sebaliknya, `element.children` menghasilkan **HTMLCollection** live yang dapat mencerminkan perubahan DOM. NodeList dari `querySelectorAll()` dapat diiterasi dengan `for...of` dan memiliki `.forEach()`, tetapi bukan array; gunakan `Array.from()` jika membutuhkan method array seperti `.map()`.
-
-Periksa apakah elemen ditemukan sebelum menggunakannya, terutama jika script bisa dipakai pada beberapa halaman:
-
-```js
-const tombol = document.querySelector('#tombol-simpan');
-
-if (tombol) {
-  tombol.textContent = 'Simpan';
-}
-```
-
-<a id="js-dom-content"></a>
-### Membaca dan mengubah konten
-
-`textContent` membaca atau mengganti teks di dalam elemen. `innerHTML` membaca atau mengganti markup HTML, sehingga jangan memasukkan teks dari pengguna ke `innerHTML`.
-
-```js
-const pesan = document.querySelector('.petunjuk');
-
-if (pesan) {
-  pesan.textContent = 'Tugas baru dapat ditambahkan.';
-}
-```
-
-String `'Tugas baru dapat ditambahkan.'` dimasukkan sebagai teks, bukan ditafsirkan sebagai HTML. Jika menggunakan `innerHTML` dengan masukan yang tidak dipercaya, seseorang dapat menyisipkan markup atau script berbahaya. Untuk teks biasa, pilih `textContent`.
-
-`innerText` juga membaca teks yang terlihat, tetapi hasilnya dapat dipengaruhi tampilan/layout. Gunakan `textContent` untuk membaca atau mengganti teks tanpa bergantung pada tampilan.
-
-<a id="js-dom-attributes"></a>
-### Atribut, property, dan data attribute
-
-Atribut adalah informasi yang tertulis pada tag HTML. Elemen DOM juga memiliki property JavaScript yang mencerminkan keadaan saat ini. Misalnya, atribut `value` dapat menunjukkan nilai awal input, sementara property `.value` menunjukkan nilai yang sedang diketik.
-
-```html
-<input id="nama" value="Dhimas">
-```
-
-```js
-const inputNama = document.querySelector('#nama');
-
-if (inputNama instanceof HTMLInputElement) {
-  console.log(inputNama.getAttribute('value')); // nilai awal: 'Dhimas'
-  console.log(inputNama.value); // nilai input saat ini
-
-  inputNama.value = 'John Doe';
-  inputNama.setAttribute('aria-label', 'Nama pengguna');
-}
-```
-
-`getAttribute()` membaca atribut yang tertulis pada elemen. `.value` membaca nilai input saat ini dan dapat diperbarui dengan assignment. Pemeriksaan `instanceof HTMLInputElement` memastikan elemen yang ditemukan memang input sebelum memakai property khusus input.
-
-Atribut `data-*` dapat menyimpan informasi tambahan sederhana. Browser menyediakan nilainya melalui property `.dataset`:
-
-```html
-<button id="hapus-tugas" data-task-id="42">Hapus</button>
-```
-
-```js
-const tombolHapus = document.querySelector('#hapus-tugas');
-
-if (tombolHapus instanceof HTMLButtonElement) {
-  console.log(tombolHapus.dataset.taskId); // '42'
-}
-```
-
-Nama `data-task-id` di HTML diakses sebagai `dataset.taskId` di JavaScript. Nilainya berupa string, jadi ubah secara eksplisit jika perlu dipakai sebagai angka.
-
-<a id="js-dom-style"></a>
-### Class dan style
-
-Untuk mengubah status atau tampilan, biasanya lebih baik menambah/menghapus class daripada menulis style satu per satu dari JavaScript. Atur desain class di CSS, lalu gunakan `classList` untuk mengelolanya.
-
-```js
-const kartu = document.querySelector('.kartu');
-
-if (kartu) {
-  kartu.classList.add('aktif');
-  kartu.classList.remove('tersembunyi');
-  kartu.classList.toggle('disorot');
-  console.log(kartu.classList.contains('aktif')); // true
-  kartu.classList.toggle('aktif', true); // memastikan class aktif ada
-}
-```
-
-`add()` menambahkan class, `remove()` menghapusnya, `toggle()` bergantian menambah atau menghapusnya, dan `contains()` memeriksa keberadaannya. `toggle(nama, true)` memastikan class ada, sedangkan `toggle(nama, false)` memastikan class tidak ada. Jika hanya perlu mengatur satu nilai tampilan sementara, `element.style` bisa dipakai. `getComputedStyle(element)` membaca style akhir yang dihitung browser, termasuk aturan dari stylesheet. Aturan tampilan utama sebaiknya tetap berada di CSS.
-
-<a id="js-dom-create"></a>
-### Membuat, menyisipkan, menggandakan, dan menghapus elemen
-
-Gunakan `document.createElement()` untuk membuat elemen baru, lalu isi dan masukkan ke halaman dengan method seperti `.append()` atau `.prepend()`.
-
-```js
-const daftar = document.querySelector('#daftar-tugas');
-
-if (daftar) {
-  const item = document.createElement('li');
-  item.textContent = 'Belajar DOM';
-  item.classList.add('item');
-  daftar.append(item);
-}
-```
-
-`createElement('li')` membuat elemen `<li>` yang belum tampil di halaman. `textContent` mengisi teksnya, lalu `append(item)` memasukkannya sebagai anak terakhir dari `daftar`. Gunakan `.prepend()` jika elemen perlu diletakkan di awal. Untuk mengganti semua anak, tersedia `.replaceChildren()`, sedangkan `.remove()` menghapus elemen itu sendiri.
-
-Method untuk mengubah posisi atau mengganti elemen:
-
-| Method | Kegunaan |
-| --- | --- |
-| `parent.append(child)` / `parent.prepend(child)` | Memasukkan sebagai anak terakhir/pertama |
-| `element.before(sibling)` / `element.after(sibling)` | Memasukkan sebelum/sesudah elemen |
-| `element.replaceWith(newElement)` | Mengganti elemen dengan node lain |
-| `parent.replaceChildren(...children)` | Mengganti semua anak |
-| `element.remove()` | Menghapus elemen dari parent |
-| `element.cloneNode(true)` | Menggandakan elemen beserta turunannya |
-
-Jika memiliki pola elemen yang berulang, HTML `<template>` dapat menyimpan markup yang belum ditampilkan. Buat salinan isinya dengan `cloneNode(true)`, isi salinan, lalu masukkan ke halaman:
-
-```html
-<template id="template-tugas">
-  <li class="item"><span class="nama-tugas"></span></li>
-</template>
-<ul id="daftar-tugas"></ul>
-```
-
-```js
-const templateTugas = document.querySelector('#template-tugas');
-const daftarTugas = document.querySelector('#daftar-tugas');
-
-if (templateTugas instanceof HTMLTemplateElement && daftarTugas) {
-  const itemBaru = templateTugas.content.firstElementChild?.cloneNode(true);
-  const namaTugas = itemBaru?.querySelector('.nama-tugas');
-
-  if (itemBaru instanceof HTMLElement && namaTugas) {
-    namaTugas.textContent = 'Belajar DOM';
-    daftarTugas.append(itemBaru);
-  }
-}
-```
-
-`cloneNode(true)` menyalin elemen beserta anak-anaknya. Tanpa `true`, yang disalin hanya elemen luarnya. Isi template dibuat dengan markup yang sudah dikendalikan aplikasi; masukkan teks dinamis dengan `textContent`.
-
-Jika memasukkan banyak elemen sekaligus, buat dahulu semua elemen lalu tambahkan ke halaman dalam satu tahap. `DocumentFragment` dapat menjadi wadah sementara yang tidak tampil di halaman:
-
-```js
-const daftar = document.querySelector('#daftar-tugas');
-const tugas = ['Baca materi', 'Latihan kode'];
-
-if (daftar) {
-  const fragment = document.createDocumentFragment();
-
-  for (const teks of tugas) {
-    const item = document.createElement('li');
-    item.textContent = teks;
-    fragment.append(item);
-  }
-
-  daftar.append(fragment);
-}
-```
-
-Setiap `teks` menjadi isi teks dari satu elemen `<li>`. Setelah semua item dibuat dalam `fragment`, kumpulan itu dimasukkan ke `daftar`. Browser dapat mengurangi pekerjaan pembaruan halaman yang berulang, terutama untuk kumpulan elemen yang besar.
-
-<a id="js-dom-events"></a>
-### Event dan event listener
-
-**Event** adalah kejadian yang dilaporkan browser, misalnya klik, penekanan tombol, input, atau pengiriman form. Pasang function listener agar kode dijalankan saat event terjadi. `addEventListener()` lebih fleksibel daripada menulis handler langsung sebagai atribut HTML.
-
-```html
-<button id="tombol-sapa" type="button">Sapa</button>
-<p id="hasil-sapa"></p>
-```
-
-```js
-const tombolSapa = document.querySelector('#tombol-sapa');
-const hasilSapa = document.querySelector('#hasil-sapa');
-
-if (tombolSapa && hasilSapa) {
-  tombolSapa.addEventListener('click', function (event) {
-    hasilSapa.textContent = 'Halo, Dhimas!';
-    console.log(event.type); // 'click'
-  });
-}
-```
-
-Argument `'click'` memberi tahu browser event apa yang didengarkan. Function di dalam `addEventListener()` adalah callback yang baru dijalankan saat tombol diklik. Parameter `event` berisi informasi tentang kejadian tersebut. Listener dapat ditulis sebagai function biasa atau arrow function; function biasa memiliki aturan `this` yang berbeda, jadi gunakan `event.currentTarget` bila ingin merujuk elemen yang dipasangi listener dengan jelas.
-
-<a id="js-dom-propagation"></a>
-### Event propagation dan delegation
-
-Banyak event bergerak dari elemen yang memicu event ke elemen induknya. Perjalanan ini disebut **bubbling**. Dengan event delegation, kita memasang satu listener pada induk untuk menangani event dari banyak anak, termasuk anak yang dibuat kemudian.
-
-```html
-<ul id="daftar">
-  <li><button type="button" data-task="1">Hapus tugas 1</button></li>
-  <li><button type="button" data-task="2">Hapus tugas 2</button></li>
-</ul>
-```
-
-```js
-const daftar = document.querySelector('#daftar');
-
-if (daftar) {
-  daftar.addEventListener('click', function (event) {
-    if (!(event.target instanceof Element)) return;
-
-    const tombol = event.target.closest('button[data-task]');
-    if (!tombol || !daftar.contains(tombol)) return;
-
-    console.log(`Hapus tugas ${tombol.dataset.task}`);
-  });
-}
-```
-
-Klik pada tombol menggelembung sampai ke `<ul>`, sehingga listener di `daftar` dapat menangkapnya. `event.target` adalah elemen tempat event dimulai; `event.currentTarget` adalah elemen yang listener-nya sedang dijalankan. `closest()` mencari tombol terdekat yang cocok, termasuk jika pengguna mengklik elemen anak di dalam tombol. Pemeriksaan `contains()` memastikan tombol memang berada di daftar tersebut.
-
-Secara umum, event melewati fase capture dari luar ke dalam, lalu target, kemudian bubbling dari target ke luar. Listener standar berjalan pada fase bubbling. Opsi `{ capture: true }` memasang listener pada fase capture.
-
-Event umum yang sering dipakai:
-
-| Event | Biasanya dipasang pada | Kapan berjalan |
-| --- | --- | --- |
-| `click` | Tombol, link, atau elemen interaktif | Elemen diklik atau diaktifkan |
-| `input` | Input atau textarea | Nilai berubah saat pengguna mengetik |
-| `change` | Input, select, checkbox | Nilai berubah dan perubahan dikonfirmasi |
-| `submit` | Form | Form dikirim |
-| `keydown` / `keyup` | Elemen yang menerima fokus atau `document` | Tombol keyboard ditekan/dilepas |
-| `focus` / `blur` | Elemen form | Fokus masuk/keluar; event ini tidak bubbling |
-| `DOMContentLoaded` | `document` | HTML selesai diparsing |
-
-Gunakan `event.preventDefault()` untuk mencegah tindakan bawaan browser, misalnya navigasi link atau pengiriman form, jika aplikasi akan menggantinya dengan perilaku sendiri. Jangan memanggil `stopPropagation()` tanpa alasan karena dapat menghalangi listener lain menerima event.
-
-Listener dapat dijalankan sekali dengan opsi `once`, atau dihapus ketika tidak lagi diperlukan. Untuk menghapus listener secara manual, berikan reference function yang sama seperti saat memasangnya:
-
-```js
-function catatKlik() {
-  console.log('Tombol diklik');
-}
-
-tombolSapa.addEventListener('click', catatKlik);
-tombolSapa.removeEventListener('click', catatKlik);
-```
-
-Jika memakai function anonim yang baru dibuat, kita tidak memiliki reference yang sama untuk diberikan ke `removeEventListener()`. Opsi `{ once: true }` berguna untuk tindakan satu kali, sedangkan penghapusan listener penting untuk komponen atau halaman yang dibuat dan dihancurkan berulang.
-
-```js
-tombolSapa.addEventListener('click', function () {
-  console.log('Pesan ini hanya ditampilkan sekali');
-}, { once: true });
-```
-
-Aplikasi juga dapat membuat event sendiri dengan `CustomEvent`. Properti `detail` membawa data tambahan. Gunakan event buatan ketika bagian program perlu memberi tahu bagian lain tentang kejadian khusus:
-
-```js
-const kartu = document.querySelector('.kartu');
-
-if (kartu) {
-  kartu.addEventListener('tugas-selesai', event => {
-    console.log(event.detail.nama); // nama tugas
-  });
-
-  kartu.dispatchEvent(new CustomEvent('tugas-selesai', {
-    detail: { nama: 'Belajar DOM' },
-    bubbles: true
-  }));
-}
-```
-
-`dispatchEvent()` mengirim event ke elemen. Karena `bubbles: true`, event dapat ditangani juga oleh listener pada elemen induk. Untuk event interaksi pengguna seperti klik, biarkan browser menghasilkannya melalui tindakan pengguna; jangan membuat event seolah-olah tindakan itu benar-benar dilakukan pengguna.
-
-<a id="js-dom-forms"></a>
-### Form, input, dan validasi
-
-Event `submit` pada form cocok untuk memproses data ketika pengguna mengirim form, baik dengan menekan tombol maupun tombol Enter. Validasi dasar HTML seperti `required` tetap berguna; JavaScript dapat menambahkan perilaku aplikasi.
-
-```html
-<form id="form-nama">
-  <label for="nama-pengguna">Nama</label>
-  <input id="nama-pengguna" name="nama" required>
-  <button type="submit">Kirim</button>
-</form>
-<p id="pesan-form" aria-live="polite"></p>
-```
-
-```js
-const formNama = document.querySelector('#form-nama');
-const pesanForm = document.querySelector('#pesan-form');
-
-if (formNama instanceof HTMLFormElement && pesanForm) {
-  formNama.addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const data = new FormData(formNama);
-    const nama = String(data.get('nama') ?? '').trim();
-
-    if (nama === '') {
-      pesanForm.textContent = 'Nama perlu diisi.';
-      return;
-    }
-
-    pesanForm.textContent = `Halo, ${nama}!`;
-  });
-}
-```
-
-`preventDefault()` mencegah form melakukan navigasi/pengiriman bawaan. `FormData` membaca input yang memiliki atribut `name`; `data.get('nama')` mengambil nilainya. Nilai dari form diperlakukan sebagai input pengguna, sehingga ditampilkan dengan `textContent`, bukan `innerHTML`. `aria-live="polite"` membantu pembaca layar mengetahui bahwa pesan berubah.
-
-Untuk bereaksi saat pengguna sedang mengetik, pasang listener `input` pada elemen input. Untuk pilihan seperti checkbox atau select, event `change` sering lebih sesuai. Pilih event berdasarkan kapan nilai perlu diproses.
-
-`HTMLFormElement` juga menyediakan `checkValidity()` untuk memeriksa aturan validasi HTML, `reportValidity()` untuk memeriksa sekaligus menampilkan pesan browser, dan `setCustomValidity(pesan)` untuk menentukan pesan khusus. Validasi di browser membantu pengguna, tetapi server tetap harus memvalidasi data yang diterimanya.
-
-```js
-const form = document.querySelector('#form-nama');
-
-if (form instanceof HTMLFormElement) {
-  form.addEventListener('submit', event => {
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      form.reportValidity();
-    }
-  });
-}
-```
-
-`required`, `type="email"`, `min`, dan `max` adalah contoh aturan validasi HTML. `checkValidity()` menghasilkan boolean. `reportValidity()` memberi tahu pengguna input mana yang belum sesuai.
-
-Untuk checkbox dan radio, baca property `.checked`; untuk pilihan `<select>`, baca `.value`. Pada event keyboard, gunakan `event.key` untuk memeriksa tombol seperti `'Enter'` atau `'Escape'`. Jangan mengandalkan keyboard saja untuk tindakan yang juga harus bisa dilakukan lewat tombol atau elemen form.
-
-<a id="js-dom-traversal"></a>
-### Navigasi DOM dan traversal
-
-Setelah menemukan satu elemen, kita dapat menelusuri hubungannya dengan elemen lain. Property umum termasuk `parentElement`, `children`, `firstElementChild`, dan `nextElementSibling`.
-
-```js
-const itemAktif = document.querySelector('.item.aktif');
-
-if (itemAktif) {
-  console.log(itemAktif.parentElement); // elemen induk
-  console.log(itemAktif.nextElementSibling); // elemen saudara berikutnya atau null
-}
-```
-
-Property dengan kata `Element` berfokus pada elemen HTML. Property node yang lebih umum juga dapat menyertakan teks dan komentar, jadi gunakan versi `Element` saat yang dibutuhkan memang tag HTML.
-
-Method `closest(selector)` mencari elemen itu sendiri atau induk terdekat yang cocok dengan selector. `matches(selector)` memeriksa apakah elemen cocok dengan selector. Keduanya berguna untuk menangani event dari elemen bersarang atau memilih elemen berdasarkan kondisinya.
-
-<a id="js-dom-ready"></a>
-### Waktu pemuatan dokumen
-
-Browser harus membaca HTML sebelum elemen-elemennya dapat dipilih. Cara sederhana adalah memasang script eksternal dengan atribut `defer`; script akan dijalankan setelah HTML selesai diparsing:
-
-```html
-<script src="main.js" defer></script>
-```
-
-Jika script tidak memakai `defer` dan dimuat di bagian `<head>`, kode bisa berjalan sebelum elemen halaman tersedia. Cara lain adalah menunggu event `DOMContentLoaded`:
-
-```js
-document.addEventListener('DOMContentLoaded', function () {
-  const judul = document.querySelector('h1');
-  console.log(judul?.textContent);
-});
-```
-
-Pilih salah satu pola yang sesuai. Untuk file JavaScript eksternal biasa, `defer` umumnya sudah cukup dan membuat urutan HTML lebih mudah dipahami.
-
-<a id="js-dom-observers"></a>
-### Observer untuk perubahan DOM dan tampilan
-
-Observer memberi tahu kode ketika perubahan atau kondisi tertentu terjadi tanpa harus memeriksa berulang kali dengan timer. Gunakan **MutationObserver** untuk mengamati perubahan pada pohon DOM:
-
-```js
-const daftarPantau = document.querySelector('#daftar-tugas');
-
-if (daftarPantau) {
-  const observer = new MutationObserver(perubahan => {
-    console.log(`Jumlah perubahan: ${perubahan.length}`);
-  });
-
-  observer.observe(daftarPantau, {
-    childList: true,
-    subtree: true
-  });
-
-  // Saat pengamatan tidak diperlukan lagi:
-  observer.disconnect();
-}
-```
-
-`observe()` mulai mengamati perubahan anak, termasuk keturunan karena `subtree: true`. Callback menerima daftar perubahan. `disconnect()` menghentikan pengamatan agar observer tidak terus bekerja.
-
-**IntersectionObserver** memberi tahu saat elemen masuk atau keluar dari area yang terlihat, misalnya untuk memuat gambar saat diperlukan. **ResizeObserver** memberi tahu saat ukuran elemen berubah. Pilih observer yang sesuai daripada menjalankan pemeriksaan posisi atau ukuran berulang dengan `setInterval()`.
-
-<a id="js-dom-practices"></a>
-### Performa, aksesibilitas, dan keamanan DOM
-
-* Pastikan elemen ditemukan sebelum mengakses property atau memanggil method-nya. Selector yang tidak cocok menghasilkan `null`.
-* Gunakan `textContent` untuk memasukkan teks, terutama jika teks berasal dari pengguna. Jangan memasukkan input tidak tepercaya ke `innerHTML`.
-* Gunakan label yang terhubung ke input, tombol dengan tujuan jelas, dan pesan status yang bisa diketahui teknologi bantu.
-* Hindari membuat listener yang sama berkali-kali setiap kali function berjalan. Simpan atau pasang listener pada tempat yang tepat.
-* Pilih elemen sekali lalu gunakan kembali jika memungkinkan. Untuk daftar dinamis, pertimbangkan event delegation.
-* Perubahan DOM memengaruhi tampilan halaman. Pisahkan aturan tampilan ke CSS dan gunakan class untuk mengubah keadaan.
-* Perubahan DOM yang besar atau berulang dapat memerlukan kerja layout dan tampilan dari browser. Kelompokkan perubahan, gunakan fragment bila sesuai, dan jangan membaca layout berkali-kali di antara perubahan style/DOM tanpa kebutuhan.
-* Gunakan semantic HTML, label form, fokus keyboard yang terlihat, dan teks alternatif yang sesuai. DOM yang berfungsi dengan mouse belum tentu mudah dipakai dengan keyboard atau pembaca layar.
-* Jangan membuat selector dari input pengguna tanpa validasi. Selector CSS yang tidak valid dapat melempar error, dan markup tidak tepercaya dapat menimbulkan risiko keamanan.
-
----
+Pembahasan DOM dipisahkan ke dokumen [JavaScript DOM](JS-DOM.md) agar materi bahasa JavaScript dan API browser lebih mudah dipelajari secara terpisah.
 
 <a id="javascript-intermediate"></a>
 # 2. JavaScript Intermediate
